@@ -49,11 +49,6 @@ example(of: "Future") {
     print("end")
 }
 
-example(of: <#T##String#>, completion: <#T##() -> ()#>)
-
-
-
-
 
 
 //: [Next](@next)

@@ -3,8 +3,8 @@
     <pages>
         <page name='Notification, KVO'/>
         <page name='Publishers'/>
-        <page name='Subscribes'/>
         <page name='Subjects'/>
+        <page name='Subscribes'/>
         <page name='TransformOperator'/>
         <page name='NetworkInCombine'/>
     </pages>
