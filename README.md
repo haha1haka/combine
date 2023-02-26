@@ -2,16 +2,10 @@
 
 <br/>
 
-# Table Of Contetns
-
 * combine이란
-
 * Publisher
-
 * Subscriber
-
 * Subscrition
-
 * Subject
 
       
@@ -21,10 +15,8 @@
 <br/>
 
 ## Combine
-
 * 이벤트 처리 코드를 중앙 집중화 
 * 중첩된 closures 및 콜백과 같은 까다로운 기술을 제거하여 코드를 읽고 유지보수 하기 쉽게 만든다.
-
 * Timer, NotificationCenter, URLSession 통합관리
 
 
@@ -136,39 +128,27 @@ guard let url = URL(string: "https://api.punkapi.com/v2/beers/random") else {
 
 
 * Protocol임
-
 * publisher에게 값을 받기 위해 선언해둔 프로토콜
-
 * (Publisher의 Output == Subscriber의 Input) 해야함
-
 * `Input` `Failure` `receive(subscription:)` `receive(input:)` `receive(completion:)` 구현 해야함
 
     * `Input`
         * Publisher에게 받는 값의 타입
-
     * `Failure`
         * Publisher에게 받는 Error타입
-
     * `receive(subscription:)`
         * Publisher가 만들어서 주는 subscription을 받는다
-
     * `receive(input:)`
         * Publisher가 주는 값을 받음
         * Demand를 반환(Demand: 값을 더 원하는지에 대한 여부 == subscription을 통해 subscriber가 publish에게 보낸 request 횟수)
-
     * `receive(completion:)`
         * Publisher가 주는 completion event를 받음
 
 * Subscribers(== Subscriber 역할을 하는 타입들을 정의해둔 곳)
-
     * Sink
-
     * Assign
-
     * 기타 Subscribers 하위 속성
-
         * Demand
-
         * Completion
 
           
@@ -179,7 +159,6 @@ guard let url = URL(string: "https://api.punkapi.com/v2/beers/random") else {
 
 * class임
 * 횟수제한 없이 Subsctiption을 통해 값을 요청 가능
-
 * sink cancel 시점 확인
 
 ```swift
@@ -327,8 +306,8 @@ class BaseSubscriber: Subscriber {
 ```
 
 * 1️⃣에서 최초로 받을 값 횟수 설정
-* 2️⃣에서 반환한 값을 `추가로` 받겠다는 것 
-* 그래서 1) 일때 1 + 2 = 3개만 들어오는게 아니라, 추가로 값이 들어오면 2개 추가로 반환 하겠다는 것 
+* 2️⃣에서 반환한 값을 `추가로` 받겠다는 것
+* 그래서 1) 일때 1 + 2 = 3개만 들어오는게 아니라, 추가로 값이 들어오면 2개 추가로 반환 하겠다는 것
 * 2)일때  는 `.none` 으로 다음에 추가로 반환할 걸 막아서 3개만 들어옴
 
 * 1경우 print()
