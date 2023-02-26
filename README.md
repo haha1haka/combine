@@ -5,9 +5,6 @@
 * [Subscribers](https://github.com/haha1haka/combine#subscribers)
 * [Subscriptions](https://github.com/haha1haka/combine#subscribers)
 * [Subject](https://github.com/haha1haka/combine#subject)
-
-  ​    
-
     
 
 <br/>
