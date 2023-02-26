@@ -112,4 +112,91 @@ example(of: "sink 시점 확인", completion: {
     subject.send(completion: .finished)
     
 })
+
+example(of: "Assign직접 만들기") {
+    class MyObject {
+        var strValue: String {
+            didSet {
+                print("changed: \(strValue)")
+            }
+        }
+        
+        init(strValue: String) {
+            self.strValue = strValue
+        }
+        
+        deinit {
+            print("MyObject deinit")
+        }
+        
+    }
+    
+    let myObject = MyObject(strValue: "Jack")
+    
+    let assign = Subscribers.Assign<MyObject, String>.init(object: myObject, keyPath: \.strValue)
+    
+    ["a", "b", "c", "d", "e"].publisher
+        .subscribe(assign)
+    
+    
+    print("\(myObject.strValue)")
+}
+
+example(of: "Assign 매서드 이용") {
+    class MyObject {
+        var strValue: String {
+            didSet {
+                print("changed: \(strValue)")
+            }
+        }
+        
+        init(strValue: String) {
+            self.strValue = strValue
+        }
+        
+        deinit {
+            print("MyObject deinit")
+        }
+        
+    }
+    
+    let myObject = MyObject(strValue: "Jack")
+    
+    ["a", "b", "c", "d", "e"].publisher
+        .assign(to: \.strValue, on: myObject)
+    
+    print("\(myObject.strValue)")
+}
+
+example(of: "Demand") {
+    class BaseSubscriber: Subscriber {
+        typealias Input = String
+        typealias Faliure = Never
+        
+        func receive(subscription: Subscription) {
+            print("구독시작")
+            subscription.request(.max(1))
+        }
+        
+        func receive(_ input: String) -> Subscribers.Demand {
+            print("Input: \(input)")
+            return input == "a" ? .max(2) : .none
+            //return .max(2)
+        }
+        
+        func receive(completion: Subscribers.Completion<Never>) {
+            print("완료", completion)
+        }
+    }
+
+
+    ["a", "b", "c", "d", "e"]
+        .publisher
+        .print()
+        .subscribe(BaseSubscriber())
+}
+
+
+
+
 //: [Next](@next)
