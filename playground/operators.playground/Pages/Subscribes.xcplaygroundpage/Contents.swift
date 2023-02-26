@@ -6,6 +6,7 @@ import Combine
 func example(of name: String, completion: @escaping () -> ()) {
     print("------Example of: \(name)------")
     completion()
+    print()
 }
 var anyCancellable = Set<AnyCancellable>()
 
@@ -53,6 +54,62 @@ example(of: "Subscriber") {
         .subscribe(BaseSubscriber())
 }
 
+example(of: "Sink 직접 만들어서 subscribe로 전달") {
+    let strArrayPublisher = ["a", "b", "c"].publisher
+    
+    let sink = Subscribers.Sink<String, Never>.init(
+        receiveCompletion: {
+            print("✅\($0)")
+        },
+        receiveValue: {
+            print($0)
+        }
+    )
+    
+    strArrayPublisher.subscribe(sink)
+}
 
+example(of: "sink매서드 손쉽게 이용") {
+    let strArrayPublisher = ["a", "b", "c"].publisher
+    
+    strArrayPublisher.sink(
+        receiveCompletion: {
+            print("✅\($0)")
+        }, receiveValue: {
+            print($0)
+        }
+    )
+}
 
+example(of: "sink 시점 확인", completion: {
+    let subject = PassthroughSubject<String, Never>.init()
+    
+    let sink1 = Subscribers.Sink<String, Never>.init(
+        receiveCompletion: {
+            print("1번째 ✅ \($0)")
+        },
+        receiveValue: {
+            print("1번째 Value: \($0)")
+        }
+    )
+    let sink2 = Subscribers.Sink<String, Never>.init(
+        receiveCompletion: {
+            print("2번째 ✅ \($0)")
+        },
+        receiveValue: {
+            print("2번째 Value: \($0)")
+        }
+    )
+
+    
+    subject.subscribe(sink1)
+    subject.subscribe(sink2)
+    subject.send("Jack")
+    
+    sink1.cancel()
+    
+    subject.send("Hue")
+    subject.send(completion: .finished)
+    
+})
 //: [Next](@next)
