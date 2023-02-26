@@ -1,14 +1,12 @@
 # Combine 
 
-<br/>
+* [combine이란](https://github.com/haha1haka/combine#combine-1)
+* [Publisher](https://github.com/haha1haka/combine#publishers)
+* [Subscribers](https://github.com/haha1haka/combine#subscribers)
+* [Subscriptions](https://github.com/haha1haka/combine#subscribers)
+* [Subject](https://github.com/haha1haka/combine#subject)
 
-* combine이란
-* Publisher
-* Subscriber
-* Subscrition
-* Subject
-
-      
+  ​    
 
     
 
@@ -125,13 +123,10 @@ guard let url = URL(string: "https://api.punkapi.com/v2/beers/random") else {
 
 <img width="480" alt="스크린샷 2023-02-27 01 42 35" src="https://user-images.githubusercontent.com/106936018/221424015-6519008d-ada4-4b24-a138-2e48653f2cf5.png">
 
-
-
 * Protocol임
 * publisher에게 값을 받기 위해 선언해둔 프로토콜
 * (Publisher의 Output == Subscriber의 Input) 해야함
 * `Input` `Failure` `receive(subscription:)` `receive(input:)` `receive(completion:)` 구현 해야함
-
     * `Input`
         * Publisher에게 받는 값의 타입
     * `Failure`
