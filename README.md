@@ -1,11 +1,11 @@
 # Combine 
 
-* [combine이란](https://github.com/haha1haka/combine#combine-1)
+* [combine](https://github.com/haha1haka/combine#combine-1)
 * [Publisher](https://github.com/haha1haka/combine#publishers)
-* [Subscribers](https://github.com/haha1haka/combine#subscribers)
-* [Subscriptions](https://github.com/haha1haka/combine#subscribers)
+* [Subscriber](https://github.com/haha1haka/combine#subscribers)
+* [Subscription](https://github.com/haha1haka/combine#subscribers)
 * [Subject](https://github.com/haha1haka/combine#subject)
-    
+* Operators
 
 <br/>
 
@@ -18,7 +18,7 @@
 
 <br/>
 
-## Publishers
+## Publisher
 
 <img width="481" alt="스크린샷 2023-02-27 01 39 52" src="https://user-images.githubusercontent.com/106936018/221423894-3c86f27f-1243-4497-962b-2d6aa978b58f.png">
 
@@ -32,7 +32,7 @@
     * `Failure`
         * Publisjer가 생성할 수 있는 Error 타입
     * `receive(subscriber:)`
-        * Publisher 자신을 subscribe를 subscriber를 받음
+        * Publisher자신을 subscribe하는 subscriber를 받음
         * 즉, 자신이 누구와 구독하고 있는지 확정 짓는 매서드
         * 직접 호출하지않고, `subscribe()` 매서드 호출을 하고 receice실행 -> 이로써, Publisher에게 Subscriber누군지 확정
 
@@ -116,7 +116,7 @@ guard let url = URL(string: "https://api.punkapi.com/v2/beers/random") else {
 
 <br/>
 
-## Subscribers
+## Subscriber
 
 <img width="480" alt="스크린샷 2023-02-27 01 42 35" src="https://user-images.githubusercontent.com/106936018/221424015-6519008d-ada4-4b24-a138-2e48653f2cf5.png">
 
@@ -358,17 +358,34 @@ Input: c
 
 ## Subscription
 
-<img width="492" alt="스크린샷 2023-02-27 01 43 02" src="https://user-images.githubusercontent.com/106936018/221424046-41f59ab9-ca3a-468c-bdd5-cc34a81af317.png">
 
 
+![스크린샷 2023-02-27 10.45.57](/Users/haha1haka/Desktop/Workspace/정리정리정리/0.imageServer/스크린샷 2023-02-27 10.45.57.png)
 
 
 
 * protocol임
-* Publisher와 Subscriber를 연결하는 프로토콜
-* `request(_ demand: Subscribers.Demand)` 구현해야함(==구독후 publisher에서 subscription이 넘어올때 호출됌)
-* 즉 Subscriber가 Publisher에게 값을 요청할 때 subscription을 사용
-* `cancel()`매서드를 통해 취소 가능 + 해제 시점에 호추로딜 클로저 설정 가능(with. `.habdleEvents`)
+* Publisher와 Subscriber를 연결하는 프로토콜 
+* 연결만 하는 request매서드만 존재하는걸 볼 수 있음
+* `request(_ demand: Subscribers.Demand)` : Subscriber가 Publisher에게 값을 요청할 때 subscription을 사용
+* `cancel()`매서드를 통해 취소 가능 + 해제 시점에 클로저 설정 가능(with. `.handleEvents`)
+* 기타 채택중인 프로토콜
+    * `Cancellable`
+        * Subscriber의 request를 중단 하는 작업 수행하는 프로토콜 --> 즉 구독취소
+
+    * `CustomCombineIdentifierConvertible`
+        * 여러개의 Subsctiption들이 연결된 Publisher체인에서 Subsctiption을 식별 하는 프로토콜
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -481,4 +498,124 @@ passthroughSubject.send("Hue")
 //1번째 Value: Hue
 //2번째 Value: Hue
 ```
+
+
+
+<br>
+
+
+
+# Operators
+
+* Mapping Elements
+* Filtering Elements
+* Reducing Elements
+* Applying Mathematical Operations on Elements
+* Applying Mathcing Criteria to Elements
+* Applying Sequesce Operation to Elements
+* Selecting Specific Delements
+
+
+
+
+
+
+
+<br>
+
+
+
+## Mapping Elements
+
+* map
+* trymap
+* mapError
+* replaceNill(with:)
+* scan
+* tryScan
+* setFailureType(to:)
+
+
+
+## Filtering Elements
+
+* filter
+* tryfilter
+* compactMap
+* tryCompactMap
+* removeDuplicates
+* remoceDuplicates(by:)
+* tryRemoveDuplicates(by:)
+* replaceEmpty(with:)
+* replaceError(with:)
+
+
+
+
+
+## Reducing Elements
+
+* collect()
+* collect(_:)
+* collect(_:options:)
+* ignoreOutput()
+* reduce
+* tryreduce
+
+
+
+
+
+## Applying Mathematical Operations on Elements
+
+* count()
+* max()
+* max(by:)
+* tryMax(by:)
+* min()
+* min(by:)
+* tryMin(by:)
+
+
+
+
+
+## Applying Mathcing Criteria to Elements
+
+* contatins
+* contains(where:)
+* tryContains(where:)
+* allSatisfy(_:)
+* tryAllSatisfy(_:)
+
+
+
+## Applying Sequesce Operation to Elements
+
+* drop(untilOutputFrom:)
+* dropFirst(_:)
+* drop(while:)
+* append(_:)
+* prepend(_:)
+* prefix(_:)
+* prefix(while:)
+* tryPrefix(while:)
+* prefix(untilOutputFrom:)
+
+
+
+
+
+
+
+## Selecting Specific Delements
+
+* first()
+* first(where:)
+* tryFirst(where:)
+* last()
+* last(where:)
+* tryLast(where:)
+* output(at:)
+* output(in:)
 
