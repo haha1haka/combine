@@ -5,6 +5,7 @@
 * [Subscriber](https://github.com/haha1haka/combine#subscribers)
 * [Subscription](https://github.com/haha1haka/combine#subscribers)
 * [Subject](https://github.com/haha1haka/combine#subject)
+* combine extension
 * Operators
 
 <br/>
@@ -18,11 +19,23 @@
 
 <br/>
 
+
+
+
+
+
+
+
+
 ## Publisher
 
+
+
+<img width="777" alt="스크린샷 2023-03-01 14 02 58" src="https://user-images.githubusercontent.com/106936018/222049256-7bfce06f-14ab-44fb-a4e8-27583cd11a91.png">
+
+
+
 <img width="481" alt="스크린샷 2023-02-27 01 39 52" src="https://user-images.githubusercontent.com/106936018/221423894-3c86f27f-1243-4497-962b-2d6aa978b58f.png">
-
-
 
 * Observable 역할 (차이점은 값과 에러타입을 같이 보냄)
 * protocol임
@@ -115,6 +128,12 @@ guard let url = URL(string: "https://api.punkapi.com/v2/beers/random") else {
 
 
 <br/>
+
+
+
+
+
+
 
 ## Subscriber
 
@@ -360,7 +379,7 @@ Input: c
 
 
 
-![스크린샷 2023-02-27 10.45.57](/Users/haha1haka/Desktop/Workspace/정리정리정리/0.imageServer/스크린샷 2023-02-27 10.45.57.png)
+<img width="953" alt="스크린샷 2023-02-27 11 25 59" src="https://user-images.githubusercontent.com/106936018/221457717-5b7d5d00-f58c-4816-a80d-24b4c30b3ff1.png">
 
 
 
@@ -505,6 +524,80 @@ passthroughSubject.send("Hue")
 
 
 
+# Combine Extension
+
+* UIControl을 확장하여 Rxcocoa UIContol 기능 생성
+
+```swift
+extension UIControl {
+    func controlPublisher(for event: UIControl.Event) -> UIControl.EventPublisher {
+        return UIControl.EventPublisher(control: self, event: event)
+    }
+    
+    struct EventPublisher: Publisher {
+        typealias Output = UIControl
+        typealias Failure = Never
+        
+        let control: UIControl
+        let event: UIControl.Event
+        
+        func receive<S>(subscriber: S) where S : Subscriber, Never == S.Failure, UIControl == S.Input {
+            let subscription = EventSubscription(control: control, event: event, subscriber: subscriber)
+            subscriber.receive(subscription: subscription)
+        }
+    }
+    
+    class EventSubscription<EventSubscriber: Subscriber>: Subscription where EventSubscriber.Input == UIControl, EventSubscriber.Failure == Never {
+        let control: UIControl
+        let event: UIControl.Event
+        var subscriber: EventSubscriber?
+        
+        init(control: UIControl, event: UIControl.Event, subscriber: EventSubscriber) {
+            self.control = control
+            self.event = event
+            self.subscriber = subscriber
+            control.addTarget(self, action: #selector(eventDidOccur), for: event)
+        }
+        
+        func request(_ demand: Subscribers.Demand) {}
+        
+        func cancel() {
+            subscriber = nil
+            control.removeTarget(self, action: #selector(eventDidOccur), for: event)
+        }
+        
+        @objc func eventDidOccur() {
+            _ = subscriber?.receive(control)
+        }
+    }
+}
+```
+
+
+
+```swift
+extension UITextField {
+    var textPublisher: AnyPublisher<String, Never> {
+        controlPublisher(for: .editingChanged)
+            .map { $0 as! UITextField }
+            .map { $0.text! }
+            .eraseToAnyPublisher()
+    }
+}
+```
+
+
+
+```swift
+idTextField.textPublisher
+    .sink {
+       print($0)
+   }
+    .store(in: &anyCancellable)
+```
+
+
+
 # Operators
 
 * Mapping Elements
@@ -618,4 +711,28 @@ passthroughSubject.send("Hue")
 * tryLast(where:)
 * output(at:)
 * output(in:)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
